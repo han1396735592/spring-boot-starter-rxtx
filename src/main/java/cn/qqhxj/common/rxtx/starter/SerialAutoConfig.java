@@ -2,7 +2,7 @@ package cn.qqhxj.common.rxtx.starter;
 
 import cn.qqhxj.common.rxtx.DefaultSerialDataListener;
 import cn.qqhxj.common.rxtx.parse.StringSerialDataParser;
-import cn.qqhxj.common.rxtx.processor.SerialByteDataProcesser;
+import cn.qqhxj.common.rxtx.processor.SerialByteDataProcessor;
 import cn.qqhxj.common.rxtx.reader.SerialReader;
 import cn.qqhxj.common.rxtx.reader.VariableLengthSerialReader;
 import gnu.io.SerialPort;
@@ -47,10 +47,10 @@ public class SerialAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public SerialByteDataProcesser serialByteDataProcesser() {
-        return new SerialByteDataProcesser() {
+    public SerialByteDataProcessor serialByteDataProcesser() {
+        return new SerialByteDataProcessor() {
             @Override
-            public void processer(byte[] bytes) {
+            public void process(byte[] bytes) {
                 log.debug("Received Data:{}", bytesToHexString(bytes));
             }
 

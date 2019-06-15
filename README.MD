@@ -6,8 +6,8 @@ spring boot java 对串口的读取的快速方法。
 ```
 <dependency>
     <groupId>cn.qqhxj.common</groupId>
-     <artifactId>sprong-boot-starter-rxtx</artifactId>
-     <version>1.1-SNAPSHOT</version>
+     <artifactId>spring-boot-starter-rxtx</artifactId>
+     <version>1.3-RELEASE</version>
 </dependency>
 ```
 2. 串口配置
