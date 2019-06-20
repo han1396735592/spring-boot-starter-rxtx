@@ -34,9 +34,19 @@ public class SerialContentBuilder implements InitializingBean {
 
         SerialPort serialPort = null;
         try {
-            serialPort = SerialUtils.connect(serialPortProperties.getPortName(), serialPortProperties.getBaudRate());
-
+            serialPort = SerialUtils.connect(serialPortProperties.getPortName(),
+                    serialPortProperties.getBaudRate(),
+                    serialPortProperties.getDataBits(),
+                    serialPortProperties.getStopBits(),
+                    serialPortProperties.getParity());
             log.debug("configured SerialPort = {}", serialPort);
+            log.debug("SerialPort parameter  portName = {},baudRate={}, dataBits={},stopBits ={},parity={}",
+                    serialPortProperties.getPortName(),
+                    serialPortProperties.getBaudRate(),
+                    serialPortProperties.getDataBits(),
+                    serialPortProperties.getStopBits(),
+                    serialPortProperties.getParity()
+            );
             SerialContext.setSerialPort(serialPort);
         } catch (Exception e) {
             log.warn("serial port is not configured");
