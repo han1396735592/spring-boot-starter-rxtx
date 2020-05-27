@@ -1,64 +1,43 @@
 package cn.qqhxj.common.rxtx.starter;
 
 import gnu.io.SerialPort;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
 
 /**
  * @author han xinjian
  **/
-
-@ConfigurationProperties(prefix = "serialport")
+@Data
+@ConfigurationProperties(prefix = SerialPortProperties.prefix)
 public class SerialPortProperties {
 
-    private String portName;
+    public final static String prefix = "serialport";
 
-    private int baudRate;
+    private List<SerialPortConfig> config;
 
-    private int dataBits = SerialPort.DATABITS_8;
+    @Data
+    public static class SerialPortConfig {
+        private String portName;
 
-    private int stopBits = SerialPort.STOPBITS_1;
+        private int baudRate;
 
-    private int parity = SerialPort.PARITY_NONE;
+        private int dataBits = SerialPort.DATABITS_8;
 
-    public String getPortName() {
-        return portName;
+        private int stopBits = SerialPort.STOPBITS_1;
+
+        private int parity = SerialPort.PARITY_NONE;
+
+        String readerClass = "cn.qqhxj.common.rxtx.reader.VariableLengthSerialReader";
+
+        private Object[] readerConfig = new Object[]{"{", "}"};
+
+        String parseClass = "cn.qqhxj.common.rxtx.parse.StringSerialDataParser";
+
+        private Object[] parseConfig = new Object[0];
+
+
     }
 
-    public void setPortName(String portName) {
-        this.portName = portName;
-    }
-
-
-    public void setBaudRate(int baudRate) {
-        this.baudRate = baudRate;
-    }
-
-
-    public int getBaudRate() {
-        return baudRate;
-    }
-
-    public void setDataBits(int dataBits) {
-        this.dataBits = dataBits;
-    }
-
-    public void setStopBits(int stopBits) {
-        this.stopBits = stopBits;
-    }
-
-    public void setParity(int parity) {
-        this.parity = parity;
-    }
-
-    public int getDataBits() {
-        return dataBits;
-    }
-
-    public int getStopBits() {
-        return stopBits;
-    }
-
-    public int getParity() {
-        return parity;
-    }
 }
