@@ -1,8 +1,8 @@
 # spring-boot-starter-rxtx 
 
 spring boot 对串口的读取的快速方法
-
-##使用方法
+[demo](https://github.com/han1396735592/rxtx-demo)
+## 使用方法
 - 普通項目请使用 [common-rxtx](https://github.com/han1396735592/common-rxtx)
 1. 引入依赖
     ```xml
