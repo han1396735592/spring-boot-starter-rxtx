@@ -1,4 +1,4 @@
-package cn.qqhxj.common.rxtx.starter;
+package cn.qqhxj.rxtx.starter;
 
 import gnu.io.SerialPort;
 import lombok.Data;
@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
- * @author han xinjian
+ * @author han1396735592
  **/
 @Data
 @ConfigurationProperties(prefix = SerialPortProperties.prefix)
@@ -21,23 +21,13 @@ public class SerialPortProperties {
     public static class SerialPortConfig {
         private String portName;
 
-        private int baudRate;
+        private int baudRate = 9600;
 
         private int dataBits = SerialPort.DATABITS_8;
 
         private int stopBits = SerialPort.STOPBITS_1;
 
         private int parity = SerialPort.PARITY_NONE;
-
-        String readerClass = "cn.qqhxj.common.rxtx.reader.VariableLengthSerialReader";
-
-        private Object[] readerConfig = new Object[]{"{", "}"};
-
-        String parseClass = "cn.qqhxj.common.rxtx.parse.StringSerialDataParser";
-
-        private Object[] parseConfig = new Object[0];
-
-
     }
 
 }

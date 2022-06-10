@@ -1,4 +1,4 @@
-package cn.qqhxj.common.rxtx.starter;
+package cn.qqhxj.rxtx.starter.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
