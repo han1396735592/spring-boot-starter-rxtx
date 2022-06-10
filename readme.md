@@ -2,14 +2,19 @@
 
 spring boot 对串口的读取的快速方法
 [demo](https://github.com/han1396735592/rxtx-demo)
+
 ## 与 1.0 版本的不同之处
+
 - 支持了多串口操作
 - maven 坐标名称有调整
+
 ## 使用方法
 
 - 普通項目请使用 [common-rxtx](https://github.com/han1396735592/common-rxtx)
 
 1. 引入依赖
+   - 代码未发布到中心仓库 自行克隆打包使用
+    - 代码引用了 [common-rxtx](https://github.com/han1396735592/common-rxtx) 的2.0.0-RELEASE版本也需要本地打包使用
     ```xml
      <dependency>
             <groupId>cn.qqhxj.rxtx</groupId>
@@ -20,9 +25,10 @@ spring boot 对串口的读取的快速方法
 2. 启动串口自动配置 `@EnableSerialPortAutoConfig`
 
 3. 配置串口
+
 > - 注解配置 `@EnableSerialPort(value = "COM2", portName = "COM2")`
 > - 配置文件配置
->  
+>
 > ```yml
 > serialport:
 >   config:
