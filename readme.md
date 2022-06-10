@@ -23,14 +23,10 @@ spring boot 对串口的读取的快速方法
 >  
 > ```yml
 > serialport:
-> config:
-> - portName: COM1
-> - portName: COM2
+>   config:
+>     - portName: COM1
+>     - portName: COM2
 > ```
-
-
-
-
 
 3. 串口数据读取器配置（可选）
 
