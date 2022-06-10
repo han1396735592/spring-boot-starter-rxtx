@@ -2,7 +2,9 @@
 
 spring boot 对串口的读取的快速方法
 [demo](https://github.com/han1396735592/rxtx-demo)
-
+## 与 1.0 版本的不同之处
+- 支持了多串口操作
+- maven 坐标名称有调整
 ## 使用方法
 
 - 普通項目请使用 [common-rxtx](https://github.com/han1396735592/common-rxtx)
