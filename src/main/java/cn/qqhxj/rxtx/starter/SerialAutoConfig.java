@@ -1,7 +1,7 @@
 package cn.qqhxj.rxtx.starter;
 
-import cn.qqhxj.rxtx.HexUtil;
-import cn.qqhxj.rxtx.processor.SerialByteDataProcessor;
+import cn.qqhxj.rxtx.util.HexUtil;
+import cn.qqhxj.rxtx.processor.CommPortByteDataProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ public class SerialAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean()
-    public SerialByteDataProcessor serialByteDataProcessor() {
+    public CommPortByteDataProcessor serialByteDataProcessor() {
         return bytes -> log.debug("Received Data:{}", HexUtil.bytesToHexString(bytes));
     }
 

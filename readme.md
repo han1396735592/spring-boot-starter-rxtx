@@ -19,7 +19,7 @@ spring boot 对串口的读取的快速方法
      <dependency>
             <groupId>cn.qqhxj.rxtx</groupId>
             <artifactId>spring-boot-starter-rxtx</artifactId>
-            <version>2.0.0-RELEASE</version>
+            <version>2.0.1-RELEASE</version>
      </dependency>
     ```
 2. 启动串口自动配置 `@EnableSerialPortAutoConfig`
