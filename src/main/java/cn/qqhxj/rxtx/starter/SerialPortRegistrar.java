@@ -1,7 +1,7 @@
 package cn.qqhxj.rxtx.starter;
 
-import cn.qqhxj.rxtx.context.SerialContext;
-import cn.qqhxj.rxtx.util.SerialUtils;
+import cn.qqhxj.rxtx.SerialContext;
+import cn.qqhxj.rxtx.SerialUtils;
 import cn.qqhxj.rxtx.starter.annotation.EnableSerialPort;
 import gnu.io.SerialPort;
 import lombok.extern.slf4j.Slf4j;
