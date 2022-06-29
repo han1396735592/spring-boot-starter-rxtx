@@ -83,7 +83,7 @@ spring boot 对串口的读取的快速方法
       }
     }
     ```  
-4. 启动
+6. 启动
 
 ```java
 
@@ -97,3 +97,12 @@ public class RxtxDemoApplication {
     }
 }
 ```    
+
+7. 获取 串口上下文 `SerialContext`
+
+```java
+@Qualifier(value = "COM2.SerialContext")
+@Autowired
+private SerialContext serialContext;
+
+```

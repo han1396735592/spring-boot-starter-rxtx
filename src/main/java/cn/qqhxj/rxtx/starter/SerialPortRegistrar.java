@@ -5,6 +5,8 @@ import cn.qqhxj.rxtx.SerialUtils;
 import cn.qqhxj.rxtx.starter.annotation.EnableSerialPort;
 import gnu.io.SerialPort;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -21,7 +23,6 @@ import java.util.Map;
 @Slf4j
 @Order(Integer.MIN_VALUE)
 public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
-
     private static BeanDefinitionRegistry beanDefinitionRegistry = null;
 
     @Override
@@ -69,6 +70,7 @@ public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
             beanDefinitionRegistry.registerBeanDefinition(
                     beanName + "." + SerialContext.class.getSimpleName(),
                     builder.getBeanDefinition());
+            log.info("register SerialContext [beanName={}] of {} ", beanName + "." + SerialContext.class.getSimpleName(), serialPortConfig.getPortName());
         } catch (Exception e) {
             e.printStackTrace();
         }
