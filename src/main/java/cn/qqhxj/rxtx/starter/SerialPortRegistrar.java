@@ -26,7 +26,6 @@ public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
-        System.out.println("==================");
         Map<String, Object> defaultAttrs = annotationMetadata
                 .getAnnotationAttributes(EnableSerialPort.class.getName(), false);
         SerialPortProperties.SerialPortConfig serialPortConfig = new SerialPortProperties.SerialPortConfig();
@@ -42,8 +41,9 @@ public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
                 e.printStackTrace();
             }
         });
-        SerialPortRegistrar.beanDefinitionRegistry= beanDefinitionRegistry;
+        SerialPortRegistrar.beanDefinitionRegistry = beanDefinitionRegistry;
         registerSerialContextBean(serialPortConfig, beanName);
+        log.info("start SerialPortRegistrar {}", serialPortConfig.getPortName());
     }
 
     public static void registerSerialContextBean(SerialPortProperties.SerialPortConfig serialPortConfig, String beanName) {
