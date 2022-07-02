@@ -21,7 +21,6 @@ import java.util.Map;
 @Slf4j
 @Order(Integer.MIN_VALUE)
 public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
-    private static BeanDefinitionRegistry beanDefinitionRegistry = null;
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
@@ -40,12 +39,11 @@ public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
                 e.printStackTrace();
             }
         });
-        SerialPortRegistrar.beanDefinitionRegistry = beanDefinitionRegistry;
-        registerSerialContextBean(serialPortConfig, beanName);
+        registerSerialContextBean(beanDefinitionRegistry,serialPortConfig, beanName);
         log.info("start SerialPortRegistrar {}", serialPortConfig.getPortName());
     }
 
-    public static void registerSerialContextBean(SerialPortProperties.SerialPortConfig serialPortConfig, String beanName) {
+    public static void registerSerialContextBean(BeanDefinitionRegistry beanDefinitionRegistry,SerialPortProperties.SerialPortConfig serialPortConfig, String beanName) {
         try {
             SerialPort serialPort = SerialUtils.connect(serialPortConfig.getPortName(),
                     serialPortConfig.getBaudRate(),

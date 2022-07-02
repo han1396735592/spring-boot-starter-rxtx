@@ -13,8 +13,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.type.MethodMetadata;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import java.util.Map;
 @Slf4j
 public class SerialContentBuilder implements InitializingBean {
     @Autowired
-    private ApplicationContext applicationContext;
+    private GenericApplicationContext applicationContext;
 
 
     @Autowired
@@ -40,7 +39,7 @@ public class SerialContentBuilder implements InitializingBean {
         if (configList != null) {
             configList.forEach(config -> {
                 try {
-                    SerialPortRegistrar.registerSerialContextBean(config, config.getPortName());
+                    SerialPortRegistrar.registerSerialContextBean(applicationContext, config, config.getPortName());
                 } catch (Exception e) {
                     e.printStackTrace();
                     log.warn("serial port is not configured");
@@ -100,19 +99,21 @@ public class SerialContentBuilder implements InitializingBean {
 
 
     public Collection<SerialContext> filterSerialContext(Map<String, SerialContext> serialContextMap, String beanName) {
-        BeanDefinition beanDefinition = ((AnnotationConfigApplicationContext) applicationContext).getBeanFactory().getBeanDefinition(beanName);
+        BeanDefinition beanDefinition = applicationContext.getBeanFactory().getBeanDefinition(beanName);
         if (beanDefinition instanceof AnnotatedBeanDefinition) {
             AnnotatedBeanDefinition annotatedBeanDefinition = (AnnotatedBeanDefinition) beanDefinition;
             MethodMetadata factoryMethodMetadata = annotatedBeanDefinition.getFactoryMethodMetadata();
-            Map<String, Object> defaultAttrs = factoryMethodMetadata.getAnnotationAttributes(SerialPortBinder.class.getName(), false);
-            if (defaultAttrs != null && defaultAttrs.containsKey("value")) {
-                ArrayList<SerialContext> serialContextArrayList = new ArrayList<>();
-                String name = String.valueOf(defaultAttrs.get("value"));
-                SerialContext serialContext = serialContextMap.get(name + "." + SerialContext.class.getSimpleName());
-                if (serialContext != null) {
-                    serialContextArrayList.add(serialContext);
+            if (factoryMethodMetadata != null) {
+                Map<String, Object> defaultAttrs = factoryMethodMetadata.getAnnotationAttributes(SerialPortBinder.class.getName(), false);
+                if (defaultAttrs != null && defaultAttrs.containsKey("value")) {
+                    ArrayList<SerialContext> serialContextArrayList = new ArrayList<>();
+                    String name = String.valueOf(defaultAttrs.get("value"));
+                    SerialContext serialContext = serialContextMap.get(name + "." + SerialContext.class.getSimpleName());
+                    if (serialContext != null) {
+                        serialContextArrayList.add(serialContext);
+                    }
+                    return serialContextArrayList;
                 }
-                return serialContextArrayList;
             }
         }
         return serialContextMap.values();
