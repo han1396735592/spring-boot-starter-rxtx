@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
 
 import java.util.ArrayList;
@@ -105,6 +106,18 @@ public class SerialContentBuilder implements InitializingBean {
             MethodMetadata factoryMethodMetadata = annotatedBeanDefinition.getFactoryMethodMetadata();
             if (factoryMethodMetadata != null) {
                 Map<String, Object> defaultAttrs = factoryMethodMetadata.getAnnotationAttributes(SerialPortBinder.class.getName(), false);
+                if (defaultAttrs != null && defaultAttrs.containsKey("value")) {
+                    ArrayList<SerialContext> serialContextArrayList = new ArrayList<>();
+                    String name = String.valueOf(defaultAttrs.get("value"));
+                    SerialContext serialContext = serialContextMap.get(name + "." + SerialContext.class.getSimpleName());
+                    if (serialContext != null) {
+                        serialContextArrayList.add(serialContext);
+                    }
+                    return serialContextArrayList;
+                }
+            } else {
+                AnnotationMetadata metadata = annotatedBeanDefinition.getMetadata();
+                Map<String, Object> defaultAttrs = metadata.getAnnotationAttributes(SerialPortBinder.class.getName(), false);
                 if (defaultAttrs != null && defaultAttrs.containsKey("value")) {
                     ArrayList<SerialContext> serialContextArrayList = new ArrayList<>();
                     String name = String.valueOf(defaultAttrs.get("value"));

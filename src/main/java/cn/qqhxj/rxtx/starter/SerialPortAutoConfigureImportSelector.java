@@ -7,7 +7,6 @@ import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * @author han1396735592
- * @date 2022/6/9 16:22
  */
 @Slf4j
 @Order(Integer.MIN_VALUE)
@@ -16,7 +15,7 @@ public class SerialPortAutoConfigureImportSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata annotationMetadata) {
         log.info("Enable SerialPortAutoConfigure");
-        return new String[]{SerialAutoConfig.class.getName(),SerialPortProperties.class.getName()};
+        return new String[]{SerialAutoConfig.class.getName(),SerialPortProperties.class.getName(),SerialContentBuilder.class.getName()};
     }
 
 

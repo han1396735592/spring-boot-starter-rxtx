@@ -19,10 +19,4 @@ public class SerialAutoConfig {
     public SerialByteDataProcessor serialByteDataProcessor() {
         return bytes -> log.debug("Received Data:{}", HexUtil.bytesToHexString(bytes));
     }
-
-    @Bean
-    public SerialContentBuilder serialContentBuilder() {
-        return new SerialContentBuilder();
-    }
-
 }

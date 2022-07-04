@@ -9,7 +9,6 @@ import java.lang.annotation.*;
 
 /**
  * @author han1396735592
- * @date 2022/6/9 14:46
  */
 @Import({SerialPortAutoConfigureImportSelector.class})
 @Documented
