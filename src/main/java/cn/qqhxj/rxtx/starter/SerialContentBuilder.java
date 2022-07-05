@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +42,10 @@ public class SerialContentBuilder implements InitializingBean {
         if (configList != null) {
             configList.forEach(config -> {
                 try {
-                    SerialPortRegistrar.registerSerialContextBean(applicationContext, config, config.getPortName());
+                    if (StringUtils.isEmpty(config.getAlias())) {
+                        config.setAlias(config.getPortName());
+                    }
+                    SerialPortRegistrar.registerSerialContextBean(applicationContext, config, config.getAlias());
                 } catch (Exception e) {
                     e.printStackTrace();
                     log.warn("serial port is not configured");
@@ -105,31 +110,27 @@ public class SerialContentBuilder implements InitializingBean {
             AnnotatedBeanDefinition annotatedBeanDefinition = (AnnotatedBeanDefinition) beanDefinition;
             MethodMetadata factoryMethodMetadata = annotatedBeanDefinition.getFactoryMethodMetadata();
             if (factoryMethodMetadata != null) {
-                Map<String, Object> defaultAttrs = factoryMethodMetadata.getAnnotationAttributes(SerialPortBinder.class.getName(), false);
-                if (defaultAttrs != null && defaultAttrs.containsKey("value")) {
-                    ArrayList<SerialContext> serialContextArrayList = new ArrayList<>();
-                    String name = String.valueOf(defaultAttrs.get("value"));
-                    SerialContext serialContext = serialContextMap.get(name + "." + SerialContext.class.getSimpleName());
-                    if (serialContext != null) {
-                        serialContextArrayList.add(serialContext);
-                    }
-                    return serialContextArrayList;
-                }
+                return getSerialContextListByAnnotatedMetadata(factoryMethodMetadata, serialContextMap, serialContextMap.values());
             } else {
                 AnnotationMetadata metadata = annotatedBeanDefinition.getMetadata();
-                Map<String, Object> defaultAttrs = metadata.getAnnotationAttributes(SerialPortBinder.class.getName(), false);
-                if (defaultAttrs != null && defaultAttrs.containsKey("value")) {
-                    ArrayList<SerialContext> serialContextArrayList = new ArrayList<>();
-                    String name = String.valueOf(defaultAttrs.get("value"));
-                    SerialContext serialContext = serialContextMap.get(name + "." + SerialContext.class.getSimpleName());
-                    if (serialContext != null) {
-                        serialContextArrayList.add(serialContext);
-                    }
-                    return serialContextArrayList;
-                }
+                return getSerialContextListByAnnotatedMetadata(metadata, serialContextMap, serialContextMap.values());
             }
         }
         return serialContextMap.values();
+    }
+
+    private Collection<SerialContext> getSerialContextListByAnnotatedMetadata(AnnotatedTypeMetadata annotatedTypeMetadata, Map<String, SerialContext> serialContextMap, Collection<SerialContext> allSerialContextList) {
+        Map<String, Object> defaultAttrs = annotatedTypeMetadata.getAnnotationAttributes(SerialPortBinder.class.getName(), false);
+        if (defaultAttrs != null && defaultAttrs.containsKey("value")) {
+            ArrayList<SerialContext> serialContextArrayList = new ArrayList<>();
+            String name = String.valueOf(defaultAttrs.get("value"));
+            SerialContext serialContext = serialContextMap.get(name + "." + SerialContext.class.getSimpleName());
+            if (serialContext != null) {
+                serialContextArrayList.add(serialContext);
+            }
+            return serialContextArrayList;
+        }
+        return allSerialContextList;
     }
 
 }

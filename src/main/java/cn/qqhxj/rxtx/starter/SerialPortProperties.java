@@ -20,6 +20,7 @@ public class SerialPortProperties {
     @Data
     public static class SerialPortConfig {
         private String portName;
+        private String alias;
 
         private int baudRate = 9600;
 

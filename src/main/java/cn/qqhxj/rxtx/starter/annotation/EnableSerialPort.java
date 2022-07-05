@@ -1,5 +1,8 @@
 package cn.qqhxj.rxtx.starter.annotation;
 
+import cn.qqhxj.rxtx.starter.SerialPortRegistrar;
+import org.springframework.context.annotation.Import;
+
 import java.lang.annotation.*;
 
 /**
@@ -8,6 +11,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(EnableSerialPorts.class)
+@Import(SerialPortRegistrar.class)
 public @interface EnableSerialPort {
 
     /**

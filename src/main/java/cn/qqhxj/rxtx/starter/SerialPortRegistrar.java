@@ -2,6 +2,7 @@ package cn.qqhxj.rxtx.starter;
 
 import cn.qqhxj.rxtx.SerialContext;
 import cn.qqhxj.rxtx.SerialUtils;
+import cn.qqhxj.rxtx.starter.annotation.EnableSerialPort;
 import cn.qqhxj.rxtx.starter.annotation.EnableSerialPorts;
 import gnu.io.SerialPort;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author han1396735592
@@ -22,31 +24,51 @@ import java.util.Map;
 @Order(Integer.MIN_VALUE)
 public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
 
+    private void registerBeanDefinitions(Map<String, Object> attributes, BeanDefinitionRegistry beanDefinitionRegistry) {
+        SerialPortProperties.SerialPortConfig serialPortConfig = new SerialPortProperties.SerialPortConfig();
+        String beanName = String.valueOf(attributes.get("value"));
+        attributes.remove("value");
+        attributes.forEach((k, v) -> {
+            try {
+                Field field = SerialPortProperties.SerialPortConfig.class.getDeclaredField(k);
+                field.setAccessible(true);
+                field.set(serialPortConfig, v);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        registerSerialContextBean(beanDefinitionRegistry, serialPortConfig, beanName);
+        log.info("start SerialPortRegistrar {}", serialPortConfig.getPortName());
+    }
+
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
-        Map<String, Object> annotationAttributes = annotationMetadata
-                .getAnnotationAttributes(EnableSerialPorts.class.getName(), false);
-        Object value = annotationAttributes.get("value");
-        if (value != null) {
-            if (value instanceof AnnotationAttributes[]) {
-                for (AnnotationAttributes attributes : ((AnnotationAttributes[]) value)) {
-                    SerialPortProperties.SerialPortConfig serialPortConfig = new SerialPortProperties.SerialPortConfig();
-                    String beanName = String.valueOf(attributes.get("value"));
-                    attributes.remove("value");
-                    attributes.forEach((k, v) -> {
-                        try {
-                            Field field = SerialPortProperties.SerialPortConfig.class.getDeclaredField(k);
-                            field.setAccessible(true);
-                            field.set(serialPortConfig, v);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        Set<String> annotationTypes = annotationMetadata.getAnnotationTypes();
+        for (String annotationType : annotationTypes) {
+            if (annotationType.equals(EnableSerialPorts.class.getName())) {
+                Map<String, Object> annotationAttributes = annotationMetadata
+                        .getAnnotationAttributes(EnableSerialPorts.class.getName(), false);
+                if (annotationAttributes != null) {
+                    Object value = annotationAttributes.get("value");
+                    if (value != null) {
+                        if (value instanceof AnnotationAttributes[]) {
+                            for (AnnotationAttributes attributes : ((AnnotationAttributes[]) value)) {
+                                registerBeanDefinitions(attributes, beanDefinitionRegistry);
+                            }
                         }
-                    });
-                    registerSerialContextBean(beanDefinitionRegistry, serialPortConfig, beanName);
-                    log.info("start SerialPortRegistrar {}", serialPortConfig.getPortName());
+                    }
+                }
+
+            } else if (annotationType.equals(EnableSerialPort.class.getName())) {
+                Map<String, Object> attributes = annotationMetadata
+                        .getAnnotationAttributes(EnableSerialPort.class.getName(), false);
+                if (attributes != null) {
+                    registerBeanDefinitions(attributes, beanDefinitionRegistry);
                 }
             }
         }
+
     }
 
     public static void registerSerialContextBean(BeanDefinitionRegistry beanDefinitionRegistry, SerialPortProperties.SerialPortConfig serialPortConfig, String beanName) {
