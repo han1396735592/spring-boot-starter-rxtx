@@ -26,7 +26,11 @@ spring boot 对串口的读取的快速方法
 
 - 注解和配置文件重复配置可能会配置出错
 
-> - 注解配置 `@EnableSerialPort(value = "COM2", portName = "COM2")`
+> - 注解配置 
+```java
+@EnableSerialPorts(value = {
+        @EnableSerialPort(value = "COM2", portName = "COM2")})
+```
 > - 配置文件配置
 >
 > ```yml
