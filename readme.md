@@ -13,13 +13,12 @@ spring boot 对串口的读取的快速方法
 - 普通項目请使用 [common-rxtx](https://github.com/han1396735592/common-rxtx)
 
 1. 引入依赖
-    - 代码未发布到中心仓库 自行克隆打包使用
     ```xml
-     <dependency>
+         <dependency>
             <groupId>cn.qqhxj.rxtx</groupId>
             <artifactId>spring-boot-starter-rxtx</artifactId>
             <version>2.1.0-RELEASE</version>
-     </dependency>
+        </dependency>
     ```
 2. 启动串口自动配置 `@EnableSerialPortAutoConfig`
 
