@@ -7,6 +7,7 @@ import cn.qqhxj.rxtx.processor.SerialByteDataProcessor;
 import cn.qqhxj.rxtx.processor.SerialDataProcessor;
 import cn.qqhxj.rxtx.reader.AnyDataReader;
 import cn.qqhxj.rxtx.reader.BaseSerialReader;
+import cn.qqhxj.rxtx.reader.SerialReader;
 import cn.qqhxj.rxtx.starter.annotation.SerialPortBinder;
 import gnu.io.SerialPortEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class SerialContentInitConfigBean implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         Map<String, SerialContext> stringSerialContextMap = applicationContext.getBeansOfType(SerialContext.class);
-        Map<String, BaseSerialReader> baseSerialReaderMap = applicationContext.getBeansOfType(BaseSerialReader.class);
+        Map<String, SerialReader> baseSerialReaderMap = applicationContext.getBeansOfType(SerialReader.class);
         Map<String, SerialDataParser> serialDataParserMap = applicationContext.getBeansOfType(SerialDataParser.class);
         Map<String, SerialDataProcessor> serialDataProcessorMap = applicationContext.getBeansOfType(SerialDataProcessor.class);
         Map<String, SerialByteDataProcessor> serialByteDataProcessorMap = applicationContext.getBeansOfType(SerialByteDataProcessor.class);
