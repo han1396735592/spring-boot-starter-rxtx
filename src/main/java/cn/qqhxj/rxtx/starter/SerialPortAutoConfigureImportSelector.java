@@ -15,7 +15,7 @@ public class SerialPortAutoConfigureImportSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata annotationMetadata) {
         log.info("Enable SerialPortAutoConfigure");
-        return new String[]{SerialAutoConfig.class.getName(),SerialPortProperties.class.getName(),SerialContentBuilder.class.getName()};
+        return new String[]{SerialAutoConfig.class.getName(),SerialContentInitConfigBean.class.getName()};
     }
 
 
