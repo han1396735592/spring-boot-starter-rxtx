@@ -26,10 +26,10 @@
 > - 注解配置 
 ```java
 //@EnableSerialPorts({
-//        @EnableSerialPort(port = "COM4"),
+//        @EnableSerialPort(port = "COM4",value = "串口别名"),
 ////        @EnableSerialPort(port = "COM5")
 //})
-//@EnableSerialPort(port = "COM1",value = "串口1")
+//@EnableSerialPort(port = "COM1",value = "串口别名")
 //@EnableSerialPort(port = "COM1")
 ```
 > - 配置文件配置
