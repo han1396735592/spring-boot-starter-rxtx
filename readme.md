@@ -55,7 +55,7 @@ serialport:
 - `LiveControlSerialReader` 读取有开始位、数据长度的数据
 
   大家还可以按照自己的协议实现新的数据解析器
-    - 需要实现`SerialReader`接口
+    - 需要继承`BaseSerialReader`
     - 不要忘记要加入到spring的IOC容器中，才能对数据进行处理哦
 
 4. 数据解析器配置（可选）
