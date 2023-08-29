@@ -4,10 +4,7 @@ import cn.qqhxj.rxtx.HexUtil;
 import cn.qqhxj.rxtx.context.SerialPortConfig;
 import cn.qqhxj.rxtx.processor.SerialByteDataProcessor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,8 +15,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**

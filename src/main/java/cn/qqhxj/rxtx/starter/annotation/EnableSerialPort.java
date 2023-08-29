@@ -1,9 +1,7 @@
 package cn.qqhxj.rxtx.starter.annotation;
 
 import cn.qqhxj.rxtx.starter.SerialPortRegistrar;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 
