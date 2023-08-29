@@ -1,25 +1,22 @@
 # spring-boot-starter-rxtx
 
-spring boot 对串口的读取的快速方法
-[demo](https://github.com/han1396735592/rxtx-demo)
+## 3.x版本新功能 [2.x版本文档](https://github.com/han1396735592/spring-boot-starter-rxtx/tree/2.1.0)
 
-## 与 1.0 版本的不同之处
-
-- 支持了多串口操作
-- maven 坐标名称有调整
-
+- 支持别名配置
+- 支持动态更换串口名称
+- 支持热插拔错误处理
 ## 使用方法
 
 - 普通項目请使用 [common-rxtx](https://github.com/han1396735592/common-rxtx)
 
 1. 引入依赖
-    ```xml
-         <dependency>
-            <groupId>cn.qqhxj.rxtx</groupId>
-            <artifactId>spring-boot-starter-rxtx</artifactId>
-            <version>2.1.0-RELEASE</version>
-        </dependency>
-    ```
+ ```xml
+      <dependency>
+         <groupId>cn.qqhxj.rxtx</groupId>
+         <artifactId>spring-boot-starter-rxtx</artifactId>
+         <version>3.1.0-RELEASE</version>
+     </dependency>
+ ```
 2. 启动串口自动配置 `@EnableSerialPortAutoConfig`
 
 3. 配置串口
@@ -28,17 +25,25 @@ spring boot 对串口的读取的快速方法
 
 > - 注解配置 
 ```java
-@EnableSerialPorts(value = {
-        @EnableSerialPort(value = "COM2", portName = "COM2")})
+//@EnableSerialPorts({
+//        @EnableSerialPort(port = "COM4"),
+////        @EnableSerialPort(port = "COM5")
+//})
+//@EnableSerialPort(port = "COM1",value = "串口1")
+//@EnableSerialPort(port = "COM1")
 ```
 > - 配置文件配置
 >
-> ```yml
-> serialport:
->   config:
->     - portName: COM1
->     - portName: COM2
-> ```
+```yml
+serialport:
+   config:
+   - port: COM4
+     alias: 温湿度
+     baud: 9600
+   - port: COM2
+     autoConnect: false
+     alias: 默认串口2
+ ```
 
 3. 串口数据读取器配置（可选）
 
@@ -54,38 +59,56 @@ spring boot 对串口的读取的快速方法
     - 不要忘记要加入到spring的IOC容器中，才能对数据进行处理哦
 
 4. 数据解析器配置（可选）
-
-   大家可以自己配置需要的解析器 示例如下
-    - 需要实现 `SerialDataParser<T>` 接口 的` public T parse(byte[] bytes)` 方法。解析为相应的对象
-    - 不要忘记要加入到spring的IOC容器中，才能对数据进行处理哦
-    - 一个数据解析器可同时配置在多个串口上。
-    - 使用 @SerialPortBinder(value = "COM2") 绑定到指定串口
-
-      ```java
-      public class StringSerialDataParser implements SerialDataParser<String> {
-          @Override
-          public String parse(byte[] bytes) {
-              return new String(bytes);
-          }
-      }
-      ``` 
+```java
+@SerialPortBinder("串口别名")
+@Component
+public class StringSerialDataParser implements SerialDataParser<String> {
+  @Override
+  public String parse(byte[] bytes,AbstractSerialContext serialContext) {
+      return new String(bytes);
+  }
+}
+``` 
 5. 配置数据处理器
+```java
+@SerialPortBinder("串口别名")
+@Component
+public class XXXProcessor implements SerialDataProcessor<String> {
+  @Override
+  public void processor(String s,AbstractSerialContext serialContext) {
+      System.out.println(s);
+  }
+}
+```  
+ 
 
-   没有进行任何的默认配置 需要的请自行配置
-    - 要实现`SerialDataProcessor<T>` 接口在 `public void processor(T t)`方法中对数据进行处理
-    - 要将该处理器加入到spring的IOC容器中。 配置方法如下所示
-    - 一个数据处理器可同时配置在多个串口上。
-    - 使用 @SerialPortBinder(value = "COM2") 绑定到指定串口
-    ```java
-    @Component
-    public class XXXProcessor implements SerialDataProcessor<String> {
-      @Override
-      public void processor(String s) {
-          System.out.println(s);
-      }
+6. 获取 串口上下文 `SerialContext`
+
+```java
+@Qualifier(value = "串口别名.SerialContext")
+@Autowired
+private SerialContext serialContext;
+//或者
+@Lazy
+@Resource
+@Qualifier("串口别名.SerialContext");
+private SerialContext serialContext;
+```
+
+7. 串口上下文事件监听器（可选）
+
+```java
+@Slf4j
+@Component
+//@SerialPortBinder("串口别名")
+public class SerialContextEventListenerXXX implements SerialContextEventListener {
+    @Override
+    public void connected(AbstractSerialContext serialContext) {
+        log.info("{} connected", serialContext.getSerialPort().getSerialPortInstance().getName());
     }
-    ```  
-6. 启动
+}
+```
+8. 启动
 
 ```java
 
@@ -98,17 +121,4 @@ public class RxtxDemoApplication {
         }
     }
 }
-```    
-
-7. 获取 串口上下文 `SerialContext`
-
-```java
-@Qualifier(value = "COM2.SerialContext")
-@Autowired
-private SerialContext serialContext;
-//或者
-@Lazy
-@Resource
-@Qualifier("COM31.SerialContext");
-private SerialContext serialContext;
-```
+```   
