@@ -24,9 +24,13 @@ public @interface EnableSerialPort {
 
     String port();
 
-    boolean autoConnect() default true;
+    /**
+     * 错误自动连接
+     * 连接错误重连+断开错误重连
+     */
+    boolean errorAutoConnect() default true;
 
-    int autoReconnectInterval() default 10000;
+    int reconnectInterval() default 10000;
 
     /**
      * 波特率

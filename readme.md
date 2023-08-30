@@ -41,7 +41,6 @@ serialport:
      alias: 温湿度
      baud: 9600
    - port: COM2
-     autoConnect: false
      alias: 默认串口2
  ```
 
@@ -85,13 +84,13 @@ public class XXXProcessor implements SerialDataProcessor<String> {
 6. 获取 串口上下文 `SerialContext`
 
 ```java
-@Qualifier(value = "串口别名.SerialContextImpl")
+@Qualifier(value = "串口别名.SerialContext")
 @Autowired
 private SerialContext serialContext;
 //或者
 @Lazy
 @Resource
-@Qualifier("串口别名.SerialContextImpl");
+@Qualifier("串口别名.SerialContext");
 private SerialContext serialContext;
 ```
 

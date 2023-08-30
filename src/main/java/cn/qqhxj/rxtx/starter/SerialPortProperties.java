@@ -18,22 +18,15 @@ public class SerialPortProperties {
     public final static String PREFIX = "serialport";
 
     /**
-     * 错误自动连接
-     * 连接错误重连+断开错误重连
-     */
-    private boolean errorAutoConnect = true;
-
-    /**
      * 自动连接 优先级最高
      */
     private boolean autoConnect = true;
 
     /**
-     * 自动重间隔
+     * 自动连接延时
      * 单位毫秒
      */
-    private Long autoReconnectInterval = 10000L;
-
+    private Long autoConnectDelay = 0L;
     /**
      * 串口配置
      */
@@ -43,12 +36,10 @@ public class SerialPortProperties {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{errorAutoConnect:");
-        sb.append(errorAutoConnect);
         sb.append(",autoConnect:");
         sb.append(autoConnect);
-        sb.append(",autoReconnectInterval:");
-        sb.append(autoReconnectInterval);
+        sb.append(",autoConnectDelay:");
+        sb.append(autoConnectDelay);
         sb.append(",config:");
         sb.append(config.toString());
         sb.append("}");

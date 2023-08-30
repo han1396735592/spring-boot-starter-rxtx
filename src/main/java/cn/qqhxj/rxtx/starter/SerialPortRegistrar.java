@@ -77,9 +77,9 @@ public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
 
     public static void registerSerialContextBean(BeanDefinitionRegistry beanDefinitionRegistry, SerialPortConfig serialPortConfig, String beanName) {
         try {
-            log.info("[{}] configured [port={},autoConnect={},autoReconnectInterval={},baud={},parity={},dataBits={},stopBits={}]",
+            log.info("[{}] configured [port={},errorAutoConnect={},reconnectInterval={},baud={},parity={},dataBits={},stopBits={}]",
                     serialPortConfig.getAlias(), serialPortConfig.getPort(),
-                    serialPortConfig.isAutoConnect(),serialPortConfig.getAutoReconnectInterval(),
+                    serialPortConfig.isErrorAutoConnect(), serialPortConfig.getReconnectInterval(),
                     serialPortConfig.getBaud(), serialPortConfig.getParity(),
                     serialPortConfig.getDataBits(), serialPortConfig.getStopBits()
             );

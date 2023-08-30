@@ -1,7 +1,7 @@
 package cn.qqhxj.rxtx.starter;
 
 import cn.qqhxj.rxtx.context.SerialContext;
-import cn.qqhxj.rxtx.event.SerialContextEventDispatcher;
+import cn.qqhxj.rxtx.context.SerialContextImpl;
 import cn.qqhxj.rxtx.event.SerialContextEventListener;
 import cn.qqhxj.rxtx.parse.SerialDataParser;
 import cn.qqhxj.rxtx.processor.SerialByteDataProcessor;
@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author han1396735592
@@ -96,8 +97,9 @@ public class SerialContentInitConfigBean implements InitializingBean {
 
             SerialContextEventListener serialContextEventListener = hashMap.get(serialContext);
             serialContext.setSerialContextEventListener(serialContextEventListener);
-            if (serialPortProperties.isAutoConnect() && serialContext.getSerialPortConfig().isAutoConnect()) {
-                serialContext.connect();
+            if (serialPortProperties.isAutoConnect()) {
+                SerialContextImpl.EVENT_EXECUTOR.schedule((Runnable) serialContext::connect,
+                        serialPortProperties.getAutoConnectDelay(), TimeUnit.MILLISECONDS);
             }
         }
     }
