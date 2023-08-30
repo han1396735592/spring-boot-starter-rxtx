@@ -1,15 +1,14 @@
 package cn.qqhxj.rxtx.starter;
 
 import cn.qqhxj.rxtx.context.SerialContext;
-import cn.qqhxj.rxtx.event.SerialContextListener;
+import cn.qqhxj.rxtx.event.SerialContextEventDispatcher;
+import cn.qqhxj.rxtx.event.SerialContextEventListener;
 import cn.qqhxj.rxtx.parse.SerialDataParser;
 import cn.qqhxj.rxtx.processor.SerialByteDataProcessor;
 import cn.qqhxj.rxtx.processor.SerialDataProcessor;
 import cn.qqhxj.rxtx.reader.AnyDataReader;
-import cn.qqhxj.rxtx.reader.BaseSerialReader;
 import cn.qqhxj.rxtx.reader.SerialReader;
 import cn.qqhxj.rxtx.starter.annotation.SerialPortBinder;
-import gnu.io.SerialPortEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -51,7 +50,7 @@ public class SerialContentInitConfigBean implements InitializingBean {
 
         baseSerialReaderMap.forEach((key, value) -> {
             //防止重复添加
-            if (value.getAbstractSerialContext() == null) {
+            if (value.setSerialContext() == null) {
                 Collection<SerialContext> serialContexts = filterSerialContext(stringSerialContextMap, key);
                 for (SerialContext serialContext : serialContexts) {
                     serialContext.setSerialReader(value);
@@ -96,49 +95,7 @@ public class SerialContentInitConfigBean implements InitializingBean {
             }
 
             SerialContextEventListener serialContextEventListener = hashMap.get(serialContext);
-
-            serialContext.setSerialContextListener(new SerialContextListener(serialContext, serialPortProperties.isErrorAutoConnect() ? serialPortProperties.getAutoReconnectInterval() : -1L) {
-                @Override
-                public void connectError() {
-                    super.connectError();
-                    if (serialContextEventListener != null) {
-                        serialContextEventListener.connectError(this.serialContext);
-                    }
-                }
-
-                @Override
-                public void hardwareError() {
-                    super.hardwareError();
-                    if (serialContextEventListener != null) {
-                        serialContextEventListener.hardwareError(this.serialContext);
-                    }
-                }
-
-                @Override
-                public void serialEvent(SerialPortEvent ev) {
-                    super.serialEvent(ev);
-                    if (serialContextEventListener != null) {
-                        serialContextEventListener.serialEvent(this.serialContext,ev);
-                    }
-                }
-
-                @Override
-                public void connected() {
-                    super.connected();
-                    if (serialContextEventListener != null) {
-                        serialContextEventListener.connected(this.serialContext);
-                    }
-                }
-
-                @Override
-                public void disconnected() {
-                    super.disconnected();
-                    if (serialContextEventListener != null) {
-                        serialContextEventListener.disconnected(this.serialContext);
-                    }
-                }
-
-            });
+            serialContext.setSerialContextEventListener(serialContextEventListener);
             if (serialPortProperties.isAutoConnect() && serialContext.getSerialPortConfig().isAutoConnect()) {
                 serialContext.connect();
             }

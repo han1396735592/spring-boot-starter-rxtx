@@ -26,6 +26,8 @@ public @interface EnableSerialPort {
 
     boolean autoConnect() default true;
 
+    int autoReconnectInterval() default 10000;
+
     /**
      * 波特率
      */

@@ -1,6 +1,7 @@
 package cn.qqhxj.rxtx.starter;
 
 import cn.qqhxj.rxtx.context.SerialContext;
+import cn.qqhxj.rxtx.context.SerialContextImpl;
 import cn.qqhxj.rxtx.context.SerialPortConfig;
 import cn.qqhxj.rxtx.starter.annotation.EnableSerialPort;
 import cn.qqhxj.rxtx.starter.annotation.EnableSerialPorts;
@@ -83,12 +84,12 @@ public class SerialPortRegistrar implements ImportBeanDefinitionRegistrar {
                     serialPortConfig.getDataBits(), serialPortConfig.getStopBits()
             );
             BeanDefinitionBuilder builder = BeanDefinitionBuilder
-                    .genericBeanDefinition(SerialContext.class);
+                    .genericBeanDefinition(SerialContextImpl.class);
             builder.addConstructorArgValue(serialPortConfig);
             beanDefinitionRegistry.registerBeanDefinition(
                     beanName + "." + SerialContext.class.getSimpleName(),
                     builder.getBeanDefinition());
-            log.info("Register SerialContext [beanName={}] of {} ", beanName + "." + SerialContext.class.getSimpleName(), serialPortConfig.getPort());
+            log.info("Register SerialContextImpl [beanName={}] of {} ", beanName + "." + SerialContext.class.getSimpleName(), serialPortConfig.getPort());
         } catch (Exception e) {
             e.printStackTrace();
         }

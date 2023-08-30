@@ -85,13 +85,13 @@ public class XXXProcessor implements SerialDataProcessor<String> {
 6. 获取 串口上下文 `SerialContext`
 
 ```java
-@Qualifier(value = "串口别名.SerialContext")
+@Qualifier(value = "串口别名.SerialContextImpl")
 @Autowired
 private SerialContext serialContext;
 //或者
 @Lazy
 @Resource
-@Qualifier("串口别名.SerialContext");
+@Qualifier("串口别名.SerialContextImpl");
 private SerialContext serialContext;
 ```
 
