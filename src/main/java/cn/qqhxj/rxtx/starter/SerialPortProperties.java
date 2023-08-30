@@ -26,7 +26,12 @@ public class SerialPortProperties {
      * 自动连接延时
      * 单位毫秒
      */
-    private Long autoConnectDelay = 0L;
+    private long autoConnectDelay = 0L;
+
+    /**
+     * 读数据超时时长
+     */
+    private int readTimeOut = 100;
     /**
      * 串口配置
      */
@@ -35,14 +40,12 @@ public class SerialPortProperties {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(",autoConnect:");
-        sb.append(autoConnect);
-        sb.append(",autoConnectDelay:");
-        sb.append(autoConnectDelay);
-        sb.append(",config:");
-        sb.append(config.toString());
-        sb.append("}");
-        return sb.toString();
+        return "{autoConnect:" +
+                autoConnect +
+                ",autoConnectDelay:" +
+                autoConnectDelay +
+                ",readTimeOut:" +
+                readTimeOut +
+                "}";
     }
 }

@@ -102,6 +102,7 @@ public class SerialContentInitConfigBean implements InitializingBean {
                         serialPortProperties.getAutoConnectDelay(), TimeUnit.MILLISECONDS);
             }
         }
+        SerialContextImpl.READ_TIME_OUT = serialPortProperties.getReadTimeOut();
     }
 
 
